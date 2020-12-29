@@ -1,0 +1,41 @@
+body{
+	margin:0;
+	padding: 0;
+	}
+
+.container {
+	display: flex;
+	font-family : sans-serif;
+	width: 100%;
+	}
+
+.container > div {
+	width: 80%;
+	margin: 200px auto;
+	text-align: center;
+	
+	border-radius: 5px;
+	box-shadow: 0px 0px 10px -1px rgba(100,100,100,0.75);
+	}
+	
+.Data{
+	background-color: #ffcdd2
+	}
+	
+
+.container .title {
+	font-size : 1.2em;
+	}
+	
+.container .text {
+	font-size : 2em;
+	}
+	
+header {
+	text-align: center;
+	font-size: 2em;
+	padding: 15px;
+	box-shadow: 0px 3px 3px -1px rgba(0,0,0,0.75);
+	background-color: #efebe9;
+	}
+	
