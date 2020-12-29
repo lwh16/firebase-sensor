@@ -85,6 +85,10 @@ const dataChartConfig = new Chart(temperatureCanvasCtx,
 	}
 })
 
+//const dataChart = new Chart(temperatureCanvasCtx, dataChartConfig)
+
+const dataDisplay = document.getElementById('data-display')
+
 if (!getParameterByName('start') && !getParameterByName('end'))
 {
 	setInterval(() =>
@@ -99,54 +103,32 @@ else
 	fetchDataRange()
 }
 
-    /**
-     * Initialize a new database with the firebase.database 
-    constructor
-     */
-    const database = firebase.database()
 
-    /**
-     * database.ref returns a reference to a key in the 
-    realtime database.
-     * This reference comes with a listener to read the value 
-    for the first time, and execute some action everytime a 
-    value is received
-     */
-    const temperatureListener = database.ref('temperature')
+//The new Firebase functions
+/**
+ * Initialize a new database with the firebase.database 
+constructor
+ */
+const database = firebase.database()
 
-    temperatureListener.on('value', data => {
-      /**
-       * The contents of the listener are pretty much the
-     same as the listeners in our previous chapters. The only     difference being that the value
-       * of the data being read has to be accessed through     the "val" getter method,
-       * rather than the data.value attribute
-       */
-      const now = new Date()
-      const timeNow =
-      now.getHours() + ':' + now.getMinutes() + ':' + 
-    now.getSeconds()
-      pushData(temperatureChartConfig.data.labels, timeNow,     10)
-      pushData(temperatureChartConfig.data.datasets[0].data,     data.val(), 10)
-      temperatureChart.update()
-      temperatureDisplay.innerHTML = '<strong>' + data.val() 
-    + '</strong>'
-    })
+/**
+ * database.ref returns a reference to a key in the 
+realtime database.
+ * This reference comes with a listener to read the value 
+for the first time, and execute some action everytime a 
+value is received
+ */
+const dataListener = database.ref('data')
 
-    /**
-     * Similarly, we add the corresponding references and     listeners for humidity
-     */
-    const humidityListener = database.ref('humidity')
-
-    humidityListener.on('value', data => {
-      const now = new Date()
-      const timeNow =
-      now.getHours() + ':' + now.getMinutes() + ':' +     now.getSeconds()
-      pushData(humidityChartConfig.data.labels, timeNow, 10)
-      pushData(humidityChartConfig.data.datasets[0].data,     data.val(), 10)
-      humidityChart.update()
-      humidityDisplay.innerHTML = '<strong>' + data.val() +     '</strong>'
-    })
-
-
+dataListener.on('value', data =>
+{
+	const now = new Date()
+	const timeNow = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds()
 	
+	pushData(dataChartConfig.data.labels, timeNow, 100)
+	pushData(dataChartConfig.data.datasets[0].data, data.val(), 100)
 	
+	dataChartConfig.update()
+	
+	dataDisplay.innerHTML = '<strong>' + data.val() + '</strong>'
+})
