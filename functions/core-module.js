@@ -72,10 +72,9 @@ setInterval(() =>
         //extract the data from the text file
 		var dataLs = data.split(",")
 		var keys = parseFloat(dataLs[0])
-		var mouse = parseFloat(dataLs[1])
-		var scroll = parseFloat(dataLs[2])
+		var mouse = parseFloat(dataLs[1]).toFixed(2)
+		var scroll = parseFloat(dataLs[2]).toFixed(2)
         var mins = now.getMinutes()
-        console.log(now)
         if (mins < 10)
         {
             mins = '0' + mins
@@ -89,4 +88,4 @@ setInterval(() =>
             scroll: scroll
         })
     })
-}, 4000)
+}, 30000)

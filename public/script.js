@@ -49,78 +49,55 @@ const pushData = (arr, value, maxLen) =>
 	}
 }
 
-
+//associate the charts to the html file
 const blankMouseChart = document.getElementById('mouse-chart').getContext('2d')
 const blankKeysChart = document.getElementById('keys-chart').getContext('2d')
 const blankScrollChart = document.getElementById('scroll-chart').getContext('2d')
 
-/**
-* Create a new chart on the context we just instantiated
-*/
+//create a template for each of the charts (scatter 7am - 22pm)
 
-
-const mouseChart = new Chart(blankMouseChart,
+function chartTemplateCreation(InputLabel)
 {
+	const chartTemplate = {
 
-	type: 'scatter',
-	data: {
-		datasets: [{
-			label: 'Scatter Data',
-			data: [],
-			//backgroundColor: 'rgba(255, 205, 210, 0.5)'
-		}]
-	},
-	options: {
-		legend: {
-			display: true
-		},
-		responsive: true,
-		maintainAspectRatio: false,
-
-		scales: {
-			xAxes: [{
-				ticks: {
-					suggestedMin: 7,
-					suggestedMax: 22
-				}
+		type: 'scatter',
+		data: {
+			datasets: [{
+				label: InputLabel,
+				data: [],
+				//backgroundColor: 'rgba(255, 205, 210, 0.5)'
 			}]
+		},
+		options: {
+			legend: {
+				display: true
+			},
+			responsive: true,
+			maintainAspectRatio: false,
+
+			scales: {
+				xAxes: [{
+					ticks: {
+						suggestedMin: 7,
+						suggestedMax: 22
+					}
+				}]
+			}
 		}
 	}
-})
+	return chartTemplate
+}
 
-const keysChart = new Chart(blankChart,
-{
+//create the charts
+const mouseChart = new Chart(blankMouseChart,chartTemplateCreation('mouse'))
 
-	type: 'scatter',
-	data: {
-		datasets: [{
-			label: 'Scatter Data',
-			data: [],
-			//backgroundColor: 'rgba(255, 205, 210, 0.5)'
-		}]
-	},
-	options: {
-		legend: {
-			display: true
-		},
-		responsive: true,
-		maintainAspectRatio: false,
+const keysChart = new Chart(blankKeysChart, chartTemplateCreation('keys'))
 
-		scales: {
-			xAxes: [{
-				ticks: {
-					suggestedMin: 7,
-					suggestedMax: 22
-				}
-			}]
-		}
-	}
-})
+const scrollChart = new Chart(blankScrollChart, chartTemplateCreation('scroll'))
 
 
-//const dataChart = new Chart(temperatureCanvasCtx, dataChartConfig)
 
-const dataDisplay = document.getElementById('data-display')
+const mouseDisplay = document.getElementById('mouse-display')
 
 if (!getParameterByName('start') && !getParameterByName('end'))
 {
@@ -183,8 +160,11 @@ dataRef.on('child_added', function(data, prevChildKey)
 	var timeFloat = newEntry.time.split(":")
 	var hour = parseFloat(timeFloat[0])
 	var min = parseFloat(timeFloat[1])/60
-	var time = hour + min
+	var time = (hour + min).toFixed(2)
 	addDataScatter(mouseChart, time, newEntry.mouse)
+	addDataScatter(scrollChart, time, newEntry.scroll)
+	addDataScatter(keysChart, time, newEntry.keys)
+	mouseDisplay.innerHTML = '<strong>' + newEntry.mouse + '</strong>'
 })
 
 
