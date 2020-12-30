@@ -13,15 +13,21 @@ const fs = require('fs')
 
 const accessInformation = (callback) =>
 {
-	fs.readFile('test.txt', 'utf-8', (err, data) =>
+	fs.readFile('test.txt', 'utf-8', (err, data, time) =>
 	{
 		//If there's an error, return that error
 		if (err)
 		{
 			return callback(err)
 		}
+		const now = new Date().getTime()
+		//const hour = now.getHours()
+		//const minute = now.getMinutes()
+		//const second = now.getSeconds()
+		//const timeNow = 'Time : ' + (hour + (minute/60) + (second/3600)).toFixed(4)
 		//if nothing goes back return the callback with the data
-		callback(null, data)
+		const timeNow = now.toString()
+		callback(null, data, now)
 	})
 }
 

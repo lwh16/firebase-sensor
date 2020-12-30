@@ -50,40 +50,73 @@ const pushData = (arr, value, maxLen) =>
 }
 
 
-const temperatureCanvasCtx = document.getElementById('temperature-chart').getContext('2d')
+const blankMouseChart = document.getElementById('mouse-chart').getContext('2d')
+const blankKeysChart = document.getElementById('keys-chart').getContext('2d')
+const blankScrollChart = document.getElementById('scroll-chart').getContext('2d')
 
 /**
 * Create a new chart on the context we just instantiated
 */
-const dataChartConfig = new Chart(temperatureCanvasCtx,
+
+
+const mouseChart = new Chart(blankMouseChart,
 {
 
-	type: 'line',
+	type: 'scatter',
 	data: {
-
-		labels: [],
 		datasets: [{
-		  data: [],
-		  backgroundColor: 'rgba(255, 205, 210, 0.5)'
+			label: 'Scatter Data',
+			data: [],
+			//backgroundColor: 'rgba(255, 205, 210, 0.5)'
 		}]
 	},
 	options: {
 		legend: {
-			display: false
+			display: true
 		},
 		responsive: true,
 		maintainAspectRatio: false,
 
 		scales: {
-			yAxes: [{
+			xAxes: [{
 				ticks: {
-					suggestedMin: 0,
-					suggestedMax: 100
+					suggestedMin: 7,
+					suggestedMax: 22
 				}
 			}]
 		}
 	}
 })
+
+const keysChart = new Chart(blankChart,
+{
+
+	type: 'scatter',
+	data: {
+		datasets: [{
+			label: 'Scatter Data',
+			data: [],
+			//backgroundColor: 'rgba(255, 205, 210, 0.5)'
+		}]
+	},
+	options: {
+		legend: {
+			display: true
+		},
+		responsive: true,
+		maintainAspectRatio: false,
+
+		scales: {
+			xAxes: [{
+				ticks: {
+					suggestedMin: 7,
+					suggestedMax: 22
+				}
+			}]
+		}
+	}
+})
+
 
 //const dataChart = new Chart(temperatureCanvasCtx, dataChartConfig)
 
@@ -105,21 +138,60 @@ else
 
 
 //The new Firebase functions
-/**
- * Initialize a new database with the firebase.database 
-constructor
- */
-const database = firebase.database()
 
-/**
- * database.ref returns a reference to a key in the 
-realtime database.
- * This reference comes with a listener to read the value 
-for the first time, and execute some action everytime a 
-value is received
- */
-const dataListener = database.ref('data')
 
+function addData(chart, label, data)
+{
+	chart.data.labels.push(label);
+	chart.data.datasets.forEach((dataset) =>
+	{
+		dataset.data.push(data);
+	});
+	chart.update();
+}
+
+function removeData(chart)
+{
+	chart.data.datasets.forEach((dataset) =>
+	{
+		dataset.data.pop()
+	})
+	chart.update()
+}
+
+function addDataScatter(chart, time, value)
+{
+	//chart.data.labels.push(label);
+	chart.data.datasets.forEach((dataset) =>
+	{
+		dataset.data.push({x:time,y:value})
+	})
+	chart.update()
+}
+		
+
+
+//Plot data from today
+const now = new Date()
+var date = (now.getDate()).toString() +'-' + (now.getMonth() + 1).toString()
+const dataRef = firebase.database().ref(date + "/")
+var data = {}
+
+dataRef.on('child_added', function(data, prevChildKey)
+{
+	var newEntry = data.val()
+	var timeFloat = newEntry.time.split(":")
+	var hour = parseFloat(timeFloat[0])
+	var min = parseFloat(timeFloat[1])/60
+	var time = hour + min
+	addDataScatter(mouseChart, time, newEntry.mouse)
+})
+
+
+
+
+
+/*
 dataListener.on('value', data =>
 {
 	const now = new Date()
@@ -132,3 +204,4 @@ dataListener.on('value', data =>
 	
 	dataDisplay.innerHTML = '<strong>' + data.val() + '</strong>'
 })
+*/
