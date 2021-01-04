@@ -11,6 +11,7 @@
  the firebase admin module
  */
 const accessInformationLaptop = require('./Access_Information')
+const accessInformationPiCam = require('./Access_Information')
 var admin = require('firebase-admin')
 
 /**
@@ -88,16 +89,16 @@ setInterval(() =>
             scroll: scroll
         })
     })
-}, 30000)
+}, 4000)
 
 
-//This interval is specifically for the laptop information
+//This interval is specifically for the PiCam information
 setInterval(() =>
 {
     /**
     * Retrieve sensor readings
     */
-    accessInformationLaptop((err, data, time) =>
+    accessInformationPiCam((err, data, time) =>
     {
         if (err)
         {
@@ -105,7 +106,7 @@ setInterval(() =>
         }
         //Get the date
         const now = new Date()
-        var date = (now.getDate()).toString() +'-' + (now.getMonth() + 1).toString() + "/WorkRate"
+        var date = (now.getDate()).toString() +'-' + (now.getMonth() + 1).toString() + "/UserState"
         
         //extract the data from the text file
 		var dataLs = data.split(",")
@@ -121,9 +122,41 @@ setInterval(() =>
         db.ref(date).push({
             UNIXtime: (time/1000).toFixed(0),
             time: now.getHours() + ':' + mins,
-            keys: keys,
-            mouse: mouse,
-            scroll: scroll
+            PiCamShit: keys,
+            Cam: mouse,
+            yes: scroll
         })
-    })
-}, 30000)
+        
+        const CurrentDate = ((now.getDate()).toString() +'-' + (now.getMonth() + 1).toString())
+        const dataRef = db.ref(CurrentDate + "/culmalative/")
+        
+
+            //this allows for the first instacne of each day
+            try
+            {
+                dataRef.on("value", function(data)
+                {
+                    var Entry = data.val()
+                    console.log("Tried")
+                    var test = Entry.test
+                    test += 5
+            
+                    db.ref(CurrentDate + "/culmalative").set({
+                        test: test
+                    })
+                    console.log(test)
+                })
+            }
+            catch(error)
+            {
+                console.log("Caught")
+                test = 0
+                        
+                db.ref(CurrentDate + "/culmalative").set({
+                    test: test
+                })
+            }     
+        })
+            
+}, 4000)
+
