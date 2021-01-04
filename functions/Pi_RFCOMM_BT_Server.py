@@ -25,6 +25,8 @@ server_sock.bind(("",bluetooth.PORT_ANY))
 server_sock.listen(1)
 
 port = server_sock.getsockname()[1]
+print(port)
+port = 1
 
 uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
 
@@ -47,7 +49,7 @@ try:
         
         strData = data.decode()
         print("received [%s]" % strData)
-        file1 = open("test.txt", "w")
+        file1 = open("PiCam_Data.txt", "w")
         file1.write(strData)
         
 except IOError:

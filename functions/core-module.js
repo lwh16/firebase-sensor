@@ -10,7 +10,7 @@
  * Import the "get-sensor-readings" module, as well as
  the firebase admin module
  */
-const accessInformation = require('./Access_Information')
+const accessInformationLaptop = require('./Access_Information')
 var admin = require('firebase-admin')
 
 /**
@@ -53,13 +53,13 @@ const db = admin.database()
  * network spveed.
  */
  
-
+//This interval is specifically for the laptop information
 setInterval(() =>
 {
     /**
     * Retrieve sensor readings
     */
-    accessInformation((err, data, time) =>
+    accessInformationLaptop((err, data, time) =>
     {
         if (err)
         {
@@ -67,7 +67,45 @@ setInterval(() =>
         }
         //Get the date
         const now = new Date()
-        var date = (now.getDate()).toString() +'-' + (now.getMonth() + 1).toString()
+        var date = (now.getDate()).toString() +'-' + (now.getMonth() + 1).toString() + "/WorkRate"
+        
+        //extract the data from the text file
+		var dataLs = data.split(",")
+		var keys = parseFloat(dataLs[0])
+		var mouse = parseFloat(dataLs[1]).toFixed(2)
+		var scroll = parseFloat(dataLs[2]).toFixed(2)
+        var mins = now.getMinutes()
+        if (mins < 10)
+        {
+            mins = '0' + mins
+        }
+        
+        db.ref(date).push({
+            UNIXtime: (time/1000).toFixed(0),
+            time: now.getHours() + ':' + mins,
+            keys: keys,
+            mouse: mouse,
+            scroll: scroll
+        })
+    })
+}, 30000)
+
+
+//This interval is specifically for the laptop information
+setInterval(() =>
+{
+    /**
+    * Retrieve sensor readings
+    */
+    accessInformationLaptop((err, data, time) =>
+    {
+        if (err)
+        {
+            return console.error(err)
+        }
+        //Get the date
+        const now = new Date()
+        var date = (now.getDate()).toString() +'-' + (now.getMonth() + 1).toString() + "/WorkRate"
         
         //extract the data from the text file
 		var dataLs = data.split(",")

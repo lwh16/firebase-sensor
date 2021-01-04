@@ -11,9 +11,9 @@ const fs = require('fs')
 
 //Create a function which does this
 
-const accessInformation = (callback) =>
+const accessInformationLaptop = (callback) =>
 {
-	fs.readFile('test.txt', 'utf-8', (err, data, time) =>
+	fs.readFile('Laptop_Data.txt', 'utf-8', (err, data, time) =>
 	{
 		//If there's an error, return that error
 		if (err)
@@ -32,6 +32,6 @@ const accessInformation = (callback) =>
 }
 
 //Then export the function so it can be used elsewhere
-module.exports = accessInformation
+module.exports = accessInformationLaptop
 
 
