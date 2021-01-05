@@ -11,29 +11,9 @@ const fs = require('fs')
 
 //Create a function which does this
 
-const accessInformationLaptop = (callback) =>
+const accessInformation = (callback) =>
 {
-	fs.readFile('Laptop_Data.txt', 'utf-8', (err, data, time) =>
-	{
-		//If there's an error, return that error
-		if (err)
-		{
-			return callback(err)
-		}
-		const now = new Date().getTime()
-		//const hour = now.getHours()
-		//const minute = now.getMinutes()
-		//const second = now.getSeconds()
-		//const timeNow = 'Time : ' + (hour + (minute/60) + (second/3600)).toFixed(4)
-		//if nothing goes back return the callback with the data
-		const timeNow = now.toString()
-		callback(null, data, now)
-	})
-}
-
-const accessInformationPiCam = (callback) =>
-{
-	fs.readFile('PiCam_Data.txt', 'utf-8', (err, data, time) =>
+	fs.readFile('CombinedData.txt', 'utf-8', (err, data, time) =>
 	{
 		//If there's an error, return that error
 		if (err)
@@ -52,7 +32,6 @@ const accessInformationPiCam = (callback) =>
 }
 
 //Then export the function so it can be used elsewhere
-module.exports = accessInformationLaptop
-module.exports = accessInformationPiCam
+module.exports = accessInformation
 
 
