@@ -19,6 +19,11 @@
 
 from bluetooth import *
 import bluetooth
+import json
+
+def StringToList(string):
+    LIST = list(string.split(","))
+    return LIST
 
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("",bluetooth.PORT_ANY))
@@ -48,9 +53,21 @@ try:
             break
         
         strData = data.decode()
-        print("received [%s]" % strData)
-        file1 = open("PiCam_Data.txt", "w")
-        file1.write(strData)
+        
+        DataList = StringToList(strData)
+        print(DataList)
+        file1 = open("CombinedData.json", "r")
+        json_obj = json.load(file1)
+        file1.close()
+        #edit the JSON values
+        json_obj["Siting"] = DataList[0]
+        json_obj["FocusTime"] = round(float(DataList[1]),2)
+        json_obj["PhoneTime"] = round(float(DataList[2]),2)
+        json_obj["NonFocusTime"] = round(float(DataList[3]),2)
+        
+        file2 = open("CombinedData.json", "w")
+        json.dump(json_obj, file2)
+        file2.close()
         
 except IOError:
     pass
