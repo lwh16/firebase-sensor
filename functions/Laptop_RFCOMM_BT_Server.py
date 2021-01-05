@@ -25,6 +25,7 @@ def StringToList(string):
     LIST = list(string.split(","))
     return LIST
 
+
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("",2))#bluetooth.PORT_ANY))
 server_sock.listen(1)
@@ -59,21 +60,35 @@ try:
         file1 = open("CombinedData.json", "r")
         json_obj = json.load(file1)
         file1.close()
+        print(json_obj)
         #edit the JSON values
         json_obj["Scroll"] = round(float(DataList[2]),2)
         json_obj["Mouse"] = round(float(DataList[1]),2)
         json_obj["Keys"] = round(float(DataList[0]),2)
         
-        
+        print(json_obj["Scroll"])
         file2 = open("CombinedData.json", "w")
         json.dump(json_obj, file2)
         file2.close()
+        print("test")
+        #set the LoggedOn obj to be true
+        #Then data will only be saved if the laptops bluetooth is connected
+        fileL = open("LoggedOn.json", "w")
+        print("here")
+        LogOnObj = {"LoggedOn":1}
+        print(LogOnObj)
+        json.dump(LogOnObj, fileL)
+        fileL.close()
         
 except IOError:
     pass
 
-print("disconnected")
+    print("disconnected")
+    fileL = open("LoggedOn.json", "w")
+    LogOnObj = {"LoggedOn":0}
+    json.dump(LogOnObj, fileL)
+    fileL.close()
 
-client_sock.close()
-server_sock.close()
-print("all done")
+    client_sock.close()
+    server_sock.close()
+    print("all done")

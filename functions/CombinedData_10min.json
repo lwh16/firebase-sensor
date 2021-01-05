@@ -1,8 +1,1 @@
-{
-	"Sitting_Time":null,
-	"Focused_Time":null,
-	"Phone_Time":null,
-	"Keys":null,
-	"Scroll":null,
-	"Mouse":null
-}
+{"Sitting_Time":180,"Focused_Time":120,"Phone_Time":30,"Keys":0,"Scroll":0,"Mouse":0}
