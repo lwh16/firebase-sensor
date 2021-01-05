@@ -11,6 +11,8 @@
  the firebase admin module
  */
 const accessInformation = require('./Access_Information')
+//Access the file library needed
+const fs = require('fs')
 
 var admin = require('firebase-admin')
 
@@ -76,7 +78,7 @@ setInterval(() =>
 		
 		//whether someone is sat in the chair - returns string 
 		var presence = dataLs[0]
-		//focus time - number of seconds in last interval user was focused (-1 if chair is empty)
+		//focus time - number of seconds in last interval user was focused
 		var focusTime = (parseFloat(dataLs[1])).toFixed(2)
 		//phone time - number of seconds on their phone
 		var phoneTime = (parseFloat(dataLs[2])).toFixed(2)
@@ -98,13 +100,16 @@ setInterval(() =>
         
         //Also create a decimal time where minutes are /100
 		var hour = now.getHours()
-		var decTime = (hour + mins).toFixed(2)
+		var min = now.getMinutes()
+		var decTime = (hour + mins/60).toFixed(2)
+		
         
         //push all of the raw data to the database - completed every minute
         db.ref(date + "/raw_data").push({
             UNIXtime: (time/1000).toFixed(0),
             time: now.getHours() + ':' + mins,
             decTime: decTime,
+            present: presence,
             focusTime: focusTime,
             phoneTime: phoneTime,
             nonFocusTime: nonFocusTime,
@@ -113,7 +118,68 @@ setInterval(() =>
             scroll: scroll
         })
         
-        //now see if the time 
+        //now see if the one of the 10 min intervals has been reached
+        var checkZero = mins.slice(-1)
+        if (checkZero == '0')
+        {
+			//access the 10min file
+			fs.readFile("CombinedData_10min.txt", function read(err, data)
+			{
+				if (err)
+				{
+					throw err
+				}
+				var dataToPush = data
+			})
+			//Turn the data into a list
+			var dataToPushLs = dataToPush.split(",")
+			//push the data to the 10 min path
+			db.ref(date + "/10min_culmalative_data").push(
+			{
+				time: now.getHours() + ':' + mins,
+				decTime: decTime,
+				//divide each of the times by 600 (10mins in secs)
+				sittingPercent: ((parseFloat(dataToPushLs[0]))/600).toFixed(2),
+				focusedPercent: ((parseFloat(dataToPushLs[1]))/600).toFixed(2),
+				phoneTime: (parseFloat(dataToPushLs[2])).toFixed(2),
+				keys: (parseFloat(dataToPushLs[3])).toFixed(0),
+				mouse: (parseFloat(dataToPushLs[4])).toFixed(2),
+				scroll: (parseFloat(dataToPushLs[5])).toFixed(2)
+			})
+			
+			//now set the file to have the first minute values
+			var sitTime
+			
+			if (presence == "Sitting_In_Chair")
+			{
+				sitTime = 60
+			}
+			else
+			{
+				sitTime = 0
+			}
+			
+			firstMin = sitTime + "," + focusTime + "," + phoneTime + "," + keys + "," + mouse + "," + scroll
+			
+			fs.writeFile("CombinedData_10min.txt", firstMin, (err) =>
+			{
+				if (err) throw err;
+			})
+		}
+		else
+		{
+			//if this is a normal minute - add the current data to the 10min file data
+			//access the 10min file
+			fs.readFile("CombinedData_10min.txt", function read(err, data)
+			{
+				if (err)
+				{
+					throw err
+				}
+				var tenMinData = data
+			})
+			//Turn the data into a list
+			var tenMinDataLs = dataToPush.split(",")
         
         
         
