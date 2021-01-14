@@ -2,40 +2,345 @@
 <html lang="en">
 
 	<head>
-		<title>Luke's API</title>
+		<title>Desktime Tracker</title>
 		<meta charset="UTF-8">
+		<link rel='icon' href='favicon.ico' type='image/x-icon'/>
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<link href="style.css" rel="stylesheet">
+		<style>
+			body{
+				margin:0;
+				padding: 0;
+				background-color:black;
+				font-family : sans-serif;
+				}
+				
+
+			.container {
+				margin: 0px;
+				display: flex;
+				font-family : sans-serif;
+				width: 100%;
+				background-color:black;
+				}
+
+			.container > div {
+				width: 70%;
+				margin: 30px auto;
+				
+				border-radius: 20px;
+				box-shadow: 0px 0px 10px -1px rgba(100,100,100,0.75);
+				background-color:white;
+				}
+				
+			.container1 {
+				margin: 40px;
+				display: flex;
+				font-family : sans-serif;
+				width: 100%;
+				background-color:black;
+				}
+
+			.container1 > div {
+				width: 25%;
+				margin: 10px auto;
+				text-align: center;
+				float: center;
+				padding: 20px;
+				
+				border-radius: 20px;
+				box-shadow: 0px 0px 10px -1px rgba(100,100,100,0.75);
+				background-color:white;
+				}
+				
+			.container2 {
+				margin: 40px;
+				display: flex;
+				font-family : sans-serif;
+				width: 100%;
+				background-color:black;
+			}
+				
+			.container2 > div {
+				width: 20%;
+				margin: 20px auto;
+				text-align: center;
+				padding:30px;
+				float:center;
+				
+				border-radius: 50px;
+				box-shadow: 0px 0px 10px -1px rgba(100,100,100,0.75);
+				background-color:white;
+				}
+				
+			.container3 {
+				margin: 40px;
+				display: flex;
+				font-family : sans-serif;
+				width: 100%;
+				background-color:black;
+			}
+				
+			.container3 > div {
+				width: 20%;
+				margin: 20px auto;
+				text-align: center;
+				padding:30px;
+				float:center;
+				
+				border-radius: 50px;
+				box-shadow: 0px 0px 10px -1px rgba(100,100,100,0.75);
+				background-color:green;
+				}
+				
+			.container4 {
+				margin: 40px;
+				display: flex;
+				font-family : sans-serif;
+				width: 100%;
+				background-color:black;
+			}
+				
+			.container4 > div {
+				width: 20%;
+				margin: 20px auto;
+				text-align: center;
+				padding:30px;
+				float:center;
+				
+				border-radius: 50px;
+				box-shadow: 0px 0px 10px -1px rgba(100,100,100,0.75);
+				background-color:lightgreen;
+				}
+				
+				
+			.Data{
+				background-color: #ffcdd2
+				}
+				
+
+			.container .title {
+				font-size : 1.2em;
+				}
+				
+			.container .text {
+				font-size : 2em;
+				}
+			.container .header {
+				font-size : 3em;
+				color : black;
+				text-align:center;
+				}
+			
+			.container2 .title {
+				font-size : 1.5em;
+				color: darkgrey;
+				}
+				
+				
+			.container2 .text {
+				font-size : 4em;
+				}
+				
+			.container3 .title {
+				font-size : 1.5em;
+				color : white;
+				}
+				
+				
+			.container3 .text {
+				font-size : 4em;
+				color: white;
+				}
+				
+			.container4 .title {
+				font-size : 1.5em;
+				color : white;
+				}
+				
+				
+			.container4 .text {
+				font-size : 4em;
+				color: white;
+				}	
+				
+			.container1 .text {
+				font-size : 2em;
+				}
+				
+				
+			header {
+				text-align: center;
+				font-size: 2em;
+				padding: 15px;
+				box-shadow: 0px 3px 3px -1px rgba(0,0,0,0.75);
+				background-color: #efebe9;
+				}
+				
+		</style>
 	</head>
 	
 	<body>
-		<header><strong>Text being sent via bluetooth!</strong></header>
+		<header><strong>Sensing Workrate whilst sat down</strong></header>
+		
+		<!-- insert the image here!!! -->
+		<img src="1.jpg" alt="TEST" width = "100%" height = "100%" >
+		
 		
 		<!--Then we make a container structure-->
-		<div class="container">
+		<div class="container3">
+			<div class="Start Time">
+				<p class ="title">Today started at: </p>
+				<p class="text" id="start-time"><b>Hasn't started yet...</b></p>
+			</div>
+			<div class="Latest Time">
+				<p class ="title">Most recent data at: </p>
+				<p class="text" id="current-time"><b>No data yet...</b></p>
+			</div>
+			<div class="User State">
+				<p class ="title">User is currently : </p>
+				<p class="text" id="user-state"><b>No data yet...</b></p>
+			</div>
+		</div>
+		<div class="container4">
+			<div class="Focused Minutes">
+				<p class="title" >So far today, there have been</p>
+				<p class="text" id="focused-minutes"><b>Loading...</b></p>
+				<p class="title" >focused hours</p>
+			</div>
+			<div class="Number of Breaks">
+				<p class="title" >In total</p>
+				<p class="text" id="number-breaks"><b>Loading...</b></p>
+				<p class="title" >breaks have been taken</p>
+			</div>
+			<div class="Explanation1">
+				<p class="title" >This data is updated live from the Firebase realtime database. If no data is being displayed, then it is likely that the user has not yet logged on for the day. Please come back later.</p>
+			</div>
+		</div>
+		<div class="container2">
 			<div class="Mouse Movement">
-				<p class="title">Data</p>
-				<p class="text" id="mouse-display">Loading...</p>
+				<p class="text" id="mouse-display"><b>Loading...</b></p>
+				<p class="title">cursor moved</p>
+			</div>
+			<div class="Keys Pressed2">
+				<p class="text" id="keys-display"><b>Loading...</b></p>
+				<p class="title">keys pressed and clicks</p>
+			</div>
+			<div class="Scrolling">
+				<p class="text" id="scroll-display"><b>Loading...</b></p>
+				<p class="title">scrolled</p>
+			</div>
+		</div>
+		
+		<div class="container2">
+			<div class="Info">
+				<p class="title">These pie charts give the ratio of focuse:unfocused work for the entire day and for the previous 10-min interval.</p>
+			</div>
+			<div>
+				<canvas id="pie-chart-day" width="100px" height= "100px">
+			</div>
+			<div>
+				<canvas id="pie-chart-10" width="100px" height= "100px">
+			</div>
+		</div>
+		
+		<div class="container">
+			<div class="header1">
+				<p class="header"><b>Data from today</b></p>
 			</div>
 		</div>
 		
 		<div class="container">
           <div>
-            <canvas id="mouse-chart" width="100%" height="400px">
+            <canvas id="break-chart" width="85%" height="400px">
           </div>
 		</div>
 		
 		<div class="container">
           <div>
-            <canvas id="keys-chart" width="100%" height="400px">
+            <canvas id="focus-chart" width="85%" height="400px">
           </div>
 		</div>
 		
 		<div class="container">
           <div>
-            <canvas id="scroll-chart" width="100%" height="400px">
+            <canvas id="mouse-chart" width="85%" height="400px">
           </div>
 		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="keys-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="scroll-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+			<div class="header2">
+				<p class="header"><b>Data from the last 5 days</b></p>
+			</div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="focus-time-week-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="mouse-week-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="keys-week-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="startTime-week-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+			<div class="header2">
+				<p class="header"><b>Data correlatiosn</b></p>
+			</div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="focus-mouse-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="focus-keys-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="focus-scroll-chart" width="85%" height="400px">
+          </div>
+		</div>
+		
+		<div class="container">
+          <div>
+            <canvas id="cul-focus-time-chart" width="85%" height="400px">
+          </div>
+		</div>
+		<!-- insert the image here!!! -->
+		<img src="2.jpeg" alt="TEST" width = "100%" height = "100%" >
+		
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js" ></script>
 		

@@ -17,6 +17,8 @@
 #------------------------------------------------------------------------
 
 
+
+
 from bluetooth import *
 import bluetooth
 import json
@@ -25,30 +27,30 @@ def StringToList(string):
     LIST = list(string.split(","))
     return LIST
 
+while True:
 
-server_sock=BluetoothSocket( RFCOMM )
-server_sock.bind(("",2))#bluetooth.PORT_ANY))
-server_sock.listen(1)
+    server_sock=BluetoothSocket( RFCOMM )
+    server_sock.bind(("",2))#bluetooth.PORT_ANY))
+    server_sock.listen(1)
 
-port = server_sock.getsockname()[1]
-print(port)
-port = 2
+    port = server_sock.getsockname()[1]
+    print(port)
+    port = 2
 
-uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
+    uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
 
-bluetooth.advertise_service( server_sock, "SampleServer",
-                   service_id = uuid,
-                   service_classes = [ uuid, SERIAL_PORT_CLASS ],
-                   profiles = [ SERIAL_PORT_PROFILE ]
-                    )
-                   
-print("Waiting for connection from Laptop RFCOMM channel %d" % port)
+    bluetooth.advertise_service( server_sock, "SampleServer",
+                       service_id = uuid,
+                       service_classes = [ uuid, SERIAL_PORT_CLASS ],
+                       profiles = [ SERIAL_PORT_PROFILE ]
+                        )
+                       
+    print("Waiting for connection from Laptop RFCOMM channel %d" % port)
 
-client_sock, client_info = server_sock.accept()
-print("Accepted connection from ", client_info)
+    client_sock, client_info = server_sock.accept()
+    print("Accepted connection from ", client_info)
 
-try:
-    while True:
+    try:
         data = client_sock.recv(1024)
         if len(data) == 0:
             break
@@ -65,8 +67,7 @@ try:
         json_obj["Scroll"] = round(float(DataList[2]),2)
         json_obj["Mouse"] = round(float(DataList[1]),2)
         json_obj["Keys"] = round(float(DataList[0]),2)
-        
-        print(json_obj["Scroll"])
+
         file2 = open("CombinedData.json", "w")
         json.dump(json_obj, file2)
         file2.close()
@@ -78,17 +79,20 @@ try:
         LogOnObj = {"LoggedOn":1}
         print(LogOnObj)
         json.dump(LogOnObj, fileL)
+        print("test2")
+        fileL.close()
+        print("test3")
+            
+    except:
+        #In the event of a disconnection
+        fileL = open("LoggedOn.json", "w")
+        print("loggedOn zero")
+        LogOnObj = {"LoggedOn":0}
+        json.dump(LogOnObj, fileL)
         fileL.close()
         
-except IOError:
-    pass
-
     print("disconnected")
-    fileL = open("LoggedOn.json", "w")
-    LogOnObj = {"LoggedOn":0}
-    json.dump(LogOnObj, fileL)
-    fileL.close()
-
     client_sock.close()
     server_sock.close()
     print("all done")
+ 
